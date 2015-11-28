@@ -9,7 +9,7 @@
 		<section id="taskForm">
 			<p><label>Task: </label><input id="taskName" type="text" placeholder="Next task description here"/></p>
 			<p><label>Duration: </label><input oninput="updateRangeOutput(taskMinutes.value)" type="range" id="taskMinutes" name="taskMinutes" min="1" max="25" value="25" required />
-				<output id="currentTaskMinutes">25</output> minutes
+				<output class="currentMinutes">25</output> minutes
 			</p>
 			<button type="submit" onclick="startTask()">Start!</button>
 		</section>
@@ -19,12 +19,12 @@
 			<p><label>Remaining time: </label><label class="remainingTime"</label></p>
 			<button class="toBreakOrWork" onclick="haveABreak()" disabled="">I deserve a break!</button>
 			<p>Prior tasks:</p>
-			<section id="priorTasks"></section>
+			<ol id="priorTasks"></ol>
 		</section>
 
 		<section id="breakForm">
-			<p><label>Duration: </label><input oninput="updateRangeOutput(breakMinutes.value)" type="range" id="breakMinutes" name="breakMinutes" min="1" max="5" value="5" required />
-				<output id="currentBreakMinutes">5</output> minutes
+			<p><label>Duration: </label><input oninput="updateRangeOutput(breakMinutes.value)" type="range" id="breakMinutes" name="breakMinutes" min="3" max="5" value="5" required />
+				<output class="currentMinutes">5</output> minutes
 			</p>
 			<button type="submit" onclick="startBreak()">Let's break!</button>
 		</section>

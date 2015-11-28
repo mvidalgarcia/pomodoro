@@ -2,6 +2,22 @@ var timerWorker
 var timerType
 
 /*
+ * Utils
+*/
+function storageAvailable(type) {
+	try {
+		var storage = window[type],
+			x = '__storage_test__';
+		storage.setItem(x, x);
+		storage.removeItem(x);
+		return true;
+	}
+	catch(e) {
+		return false;
+	}
+}
+
+/*
  * Task form
  */
 function startTask() {
@@ -11,18 +27,48 @@ function startTask() {
 		$("#taskForm").hide()
 		$("#taskRunningForm").show()
 		$("#currentTaskName").html($("#taskName").val())
+		$(".toBreakOrWork").prop('disabled', true)
 		timerType = "task"
+		saveTask($("#taskName").val(), $("#taskMinutes").val())
+		showPriorTasks()
 		startTimer($("#taskMinutes").val())
-		console.info("New task called " + $("#taskName").val())
 	}
+}
+
+function saveTask(name, minutes) {
+	if (storageAvailable('localStorage')) {
+		var today = new Date(),
+				dd = today.getDate(),
+				mm = today.getMonth()+1,
+				yyyy = today.getFullYear(),
+				currentDate = dd+'/'+mm+'/'+yyyy
+
+		var h = today.getHours(),
+				m = today.getMinutes(),
+				s = today.getSeconds(),
+				currentTime = h + ":" + m + ":" + s
+
+		localStorage.setItem(name, currentDate+"\t"+currentTime+"\t"+minutes)
+	}
+	else {
+		window.alert("Browser does not support localStorage :(")
+	}
+}
+
+function showPriorTasks() {
+	var keys = Object.keys(localStorage),
+      i = keys.length;
+
+    while ( i-- ) {
+			$("#priorTasks").append("<li><strong>"+keys[i]+": </strong>"+localStorage.getItem(keys[i]) +"</li>")
+    }
 }
 
 /*
  * Task/Break running
  */
  function updateRangeOutput(minutes) {
- 	$("#currentTaskMinutes").html(minutes)
- 	$("#currentBreakMinutes").html(minutes)
+ 	$(".currentMinutes").html(minutes)
  }
 
  function startTimer(minutes) {
@@ -55,11 +101,14 @@ function displayRemainingTime(e) {
 function haveABreak() {
 	$("#taskRunningForm").hide()
 	$("#breakForm").show()
+	updateRangeOutput(5)
+	$("#breakMinutes").val(5)
 }
 
 function startBreak() {
 	$("#breakForm").hide()
 	$("#breakRunningForm").show()
+	$(".toBreakOrWork").prop('disabled', true)
 	timerType = "break"
 	startTimer($("#breakMinutes").val())
 }
@@ -67,6 +116,8 @@ function startBreak() {
 function backToWork() {
 	$("#breakRunningForm").hide()
 	$("#taskForm").show()
+	updateRangeOutput(25)
+	$("#taskMinutes").val(25)
 }
 
 /* On load */
