@@ -1,3 +1,6 @@
+/*
+ * Task form
+ */
 function updateRangeOutput(minutes) {
 	$("#currentTaskMinutes").html(minutes)
 }
@@ -10,6 +13,7 @@ function startTask() {
 		$("#taskRunningForm").show()
 		$("#currentTaskName").html($("#taskName").val())
 		startTimer($("#taskMinutes").val())
+		console.info("New task called " + $("#taskName").val())
 	}
 }
 
@@ -23,9 +27,17 @@ function startTimer(minutes) {
 		window.alert("Browser does not support workers :(")
 }
 
+/*
+ * Task form running
+ */
 function displayRemainingTime(e) {
-	$("#remainingTime").html(e.data)
-	console.info(e.data)
+	if (e.data >= 0)
+		$("#remainingTime").html(e.data)
+	else {
+		var n = new Notification("The task " + $("#taskName").val() + " has finished. Have a break!")
+    setTimeout(n.close.bind(n), 10000);
+		$("#break").prop('disabled', false)
+	}
 }
 
 /* On load */
