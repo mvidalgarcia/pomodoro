@@ -16,10 +16,22 @@
 
 		<section id="taskRunningForm">
 			<p><label>Current task: </label><label id="currentTaskName"</label></p>
-			<p><label>Remaining time: </label><label id="remainingTime"</label></p>
-			<button id="break" onclick="haveABreak()" disabled="">I deserve a break!</button>
+			<p><label>Remaining time: </label><label class="remainingTime"</label></p>
+			<button class="toBreakOrWork" onclick="haveABreak()" disabled="">I deserve a break!</button>
 			<p>Prior tasks:</p>
 			<section id="priorTasks"></section>
+		</section>
+
+		<section id="breakForm">
+			<p><label>Duration: </label><input oninput="updateRangeOutput(breakMinutes.value)" type="range" id="breakMinutes" name="breakMinutes" min="1" max="5" value="5" required />
+				<output id="currentBreakMinutes">5</output> minutes
+			</p>
+			<button type="submit" onclick="startBreak()">Let's break!</button>
+		</section>
+
+		<section id="breakRunningForm">
+			<p><label>Remaining time: </label><label class="remainingTime"</label></p>
+			<button class="toBreakOrWork" onclick="backToWork()" disabled="">Back to work!</button>
 		</section>
 	</body>
 </html>
