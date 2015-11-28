@@ -8,9 +8,12 @@
 	<body>
 		<section id="taskForm">
 			<p><label>Task: </label><input id="taskName" type="text" placeholder="Next task description here"/></p>
-			<p><label>Duration: </label><input oninput="updateRangeOutput(taskMinutes.value)" type="range" id="taskMinutes" name="taskMinutes" min="1" max="25" value="25" required /> <output id="currentTaskMinutes">25</output> minutes</p>
+			<p><label>Duration: </label><input oninput="updateRangeOutput(taskMinutes.value)" type="range" id="taskMinutes" name="taskMinutes" min="1" max="25" value="25" required />
+				<output id="currentTaskMinutes">25</output> minutes
+			</p>
 			<button type="submit" onclick="startTask()">Start!</button>
 		</section>
+
 		<section id="taskRunningForm">
 			<p><label>Current task: </label><label id="currentTaskName"</label></p>
 			<p><label>Remaining time: </label><label id="remainingTime"</label></p>

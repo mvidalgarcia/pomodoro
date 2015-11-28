@@ -4,7 +4,7 @@ function updateRangeOutput(minutes) {
 
 function startTask() {
 	if (!$("#taskName").val())
-		alert("Task name!")
+		alert("Enter a task name!")
 	else {
 		$("#taskForm").hide()
 		$("#taskRunningForm").show()
@@ -18,7 +18,7 @@ function startTimer(minutes) {
 			timerWorker = new Worker("js/timer.js")
 			timerWorker.postMessage(minutes)
 			timerWorker.onmessage = displayRemainingTime
-	} 
+	}
 	else
 		window.alert("Browser does not support workers :(")
 }
