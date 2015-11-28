@@ -11,7 +11,7 @@
 			<p><label>Duration: </label><input oninput="updateRangeOutput(taskMinutes.value)" type="range" id="taskMinutes" name="taskMinutes" min="1" max="25" value="25" required />
 				<output class="currentMinutes">25</output> minutes
 			</p>
-			<button type="submit" onclick="startTask()">Start!</button>
+			<button id="startTask" type="submit" onclick="startTask()">Start!</button>
 		</section>
 
 		<section id="taskRunningForm">

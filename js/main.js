@@ -2,36 +2,24 @@ var timerWorker
 var timerType
 
 /*
- * Utils
-*/
-function storageAvailable(type) {
-	try {
-		var storage = window[type],
-			x = '__storage_test__';
-		storage.setItem(x, x);
-		storage.removeItem(x);
-		return true;
-	}
-	catch(e) {
-		return false;
-	}
-}
-
-/*
  * Task form
  */
 function startTask() {
-	if (!$("#taskName").val())
+	var taskName = $("#taskName").val(),
+			taskMinutes = $("#taskMinutes").val()
+	if (!taskName)
 		alert("Enter a task name!")
+	else if (repeatedTaskName(taskName))
+		alert("Task name repeated! Try with a different one")
 	else {
 		$("#taskForm").hide()
 		$("#taskRunningForm").show()
-		$("#currentTaskName").html($("#taskName").val())
+		$("#currentTaskName").html(taskName)
 		$(".toBreakOrWork").prop('disabled', true)
 		timerType = "task"
-		saveTask($("#taskName").val(), $("#taskMinutes").val())
+		saveTask(taskName, taskMinutes)
 		showPriorTasks()
-		startTimer($("#taskMinutes").val())
+		startTimer(taskMinutes)
 	}
 }
 
@@ -42,7 +30,6 @@ function saveTask(name, minutes) {
 				mm = today.getMonth()+1,
 				yyyy = today.getFullYear(),
 				currentDate = dd+'/'+mm+'/'+yyyy
-
 		var h = today.getHours(),
 				m = today.getMinutes(),
 				s = today.getSeconds(),
@@ -59,9 +46,15 @@ function showPriorTasks() {
 	var keys = Object.keys(localStorage),
       i = keys.length;
 
-    while ( i-- ) {
-			$("#priorTasks").append("<li><strong>"+keys[i]+": </strong>"+localStorage.getItem(keys[i]) +"</li>")
-    }
+	$("#priorTasks").empty()
+	while ( i-- ) {
+		$("#priorTasks").append("<li><strong>"+keys[i]+": </strong>"+localStorage.getItem(keys[i]) +"</li>")
+	}
+}
+
+function repeatedTaskName(name) {
+	var keys = Object.keys(localStorage)
+	return $.inArray(name, keys) > -1
 }
 
 /*
@@ -126,3 +119,19 @@ $(document).ready(function() {
 	$("#breakForm").hide()
 	$("#breakRunningForm").hide()
 })
+
+/*
+ * Utils
+*/
+function storageAvailable(type) {
+	try {
+		var storage = window[type],
+				x = '__storage_test__';
+		storage.setItem(x, x);
+		storage.removeItem(x);
+		return true;
+	}
+	catch(e) {
+		return false;
+	}
+}

@@ -7,9 +7,8 @@ self.onmessage = function(msg) {
 
 function startTimer() {
 	if (minutesLeft >= 0) {
-		console.info("timer.js: " + minutesLeft + " remaining")
 		postMessage({finished: false, remaining: minutesLeft})
-		setTimeout("startTimer()", 100)
+		setTimeout("startTimer()", 1000)
 	}
 	else
 		postMessage({finished: true, remaining: minutesLeft})
