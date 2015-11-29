@@ -26,15 +26,6 @@ function startTask() {
 /* Inserts tasks in local storage ordered by key */
 function saveTask(name, minutes) {
 	if (storageAvailable('localStorage')) {
-		// var today = new Date(),
-		// 		dd = today.getDate(),
-		// 		mm = today.getMonth()+1,
-		// 		yyyy = today.getFullYear(),
-		// 		currentDate = dd+'/'+mm+'/'+yyyy
-		// var h = today.getHours(),
-		// 		m = today.getMinutes(),
-		// 		s = today.getSeconds(),
-		// 		currentTime = h + ":" + m + ":" + s
 		var index = 0
 		var epoch = (new Date).getTime()
 		var keys = Object.keys(localStorage)
