@@ -23,19 +23,26 @@ function startTask() {
 	}
 }
 
+/* Inserts tasks in local storage ordered by key */
 function saveTask(name, minutes) {
 	if (storageAvailable('localStorage')) {
-		var today = new Date(),
-				dd = today.getDate(),
-				mm = today.getMonth()+1,
-				yyyy = today.getFullYear(),
-				currentDate = dd+'/'+mm+'/'+yyyy
-		var h = today.getHours(),
-				m = today.getMinutes(),
-				s = today.getSeconds(),
-				currentTime = h + ":" + m + ":" + s
-
-		localStorage.setItem(name, currentDate+"\t"+currentTime+"\t"+minutes)
+		// var today = new Date(),
+		// 		dd = today.getDate(),
+		// 		mm = today.getMonth()+1,
+		// 		yyyy = today.getFullYear(),
+		// 		currentDate = dd+'/'+mm+'/'+yyyy
+		// var h = today.getHours(),
+		// 		m = today.getMinutes(),
+		// 		s = today.getSeconds(),
+		// 		currentTime = h + ":" + m + ":" + s
+		var index = 0
+		var epoch = (new Date).getTime()
+		var keys = Object.keys(localStorage)
+		if (keys.length != 0) {
+			index = largestIndexArray(keys)
+			index++
+		}
+		localStorage.setItem( index, JSON.stringify({timestamp: epoch, taskName: name, taskTime: minutes}) )
 	}
 	else {
 		window.alert("Browser does not support localStorage :(")
@@ -43,18 +50,25 @@ function saveTask(name, minutes) {
 }
 
 function showPriorTasks() {
-	var keys = Object.keys(localStorage),
-      i = keys.length;
-
+	var indexes = Object.keys(localStorage)
+	// Sort most recent first
+	indexes.sort(sortNumber)
 	$("#priorTasks").empty()
-	while ( i-- ) {
-		$("#priorTasks").append("<li><strong>"+keys[i]+": </strong>"+localStorage.getItem(keys[i]) +"</li>")
-	}
+
+	$.each(indexes, function( index, value ) {
+		var item = JSON.parse(localStorage.getItem(value))
+		$("#priorTasks").append("<li><strong>"+item.taskName+": </strong>"+new Date(item.timestamp)+" "+item.taskTime+"</li>")
+	})
 }
 
 function repeatedTaskName(name) {
-	var keys = Object.keys(localStorage)
-	return $.inArray(name, keys) > -1
+	var tasks = allStorage()
+	for (var i=0; i < tasks.length; i++) {
+		var task = JSON.parse(tasks[i])
+		if (task.taskName == name)
+			return true
+	}
+	return false
 }
 
 /*
@@ -111,6 +125,7 @@ function backToWork() {
 	$("#taskForm").show()
 	updateRangeOutput(25)
 	$("#taskMinutes").val(25)
+	$("#taskName").html('')
 }
 
 /* On load */
@@ -134,4 +149,30 @@ function storageAvailable(type) {
 	catch(e) {
 		return false;
 	}
+}
+
+function allStorage() {
+  var values = [],
+      keys = Object.keys(localStorage),
+      i = keys.length
+
+  while ( i-- ) {
+      values.push( localStorage.getItem(keys[i]) )
+  }
+
+  return values
+}
+
+function largestIndexArray(array) {
+	var largest = 0
+	for (var i = 0; i <= array.length; i++){
+		if (parseInt(array[i]) > largest)
+			var largest = parseInt(array[i])
+	}
+	return largest
+}
+
+/* Descendant */
+function sortNumber(a,b) {
+    return b - a;
 }
